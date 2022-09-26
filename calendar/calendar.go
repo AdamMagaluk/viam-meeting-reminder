@@ -15,9 +15,6 @@ import (
 	"google.golang.org/api/option"
 )
 
-// 530243746886-afct64nmmhro6md1kr3vfvguog985hd7.apps.googleusercontent.com
-// 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
-
 type Event struct {
 	ID        string
 	StartTime time.Time
