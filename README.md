@@ -5,17 +5,17 @@ meetings 2 minutes before they start all powered by [Viam](https://viam.com).
 
 `git clone https://github.com/AdamMagaluk/viam-meeting-reminder.git`
 
-1. Create a Oauth2 Client Google Cloud
+### 1. Create a Oauth2 Client Google Cloud
 
 Follow the [Google documentation here](https://developers.google.com/calendar/api/quickstart/go)
 
 Download the credentials file and save to `./calendar_oauth_creds.json`
 
-2. Setup Pi and Create Viam Robot
+### 2. Setup Pi and Create Viam Robot
 
 Follow the steps [here](https://docs.viam.com/docs/getting-started/installation/).
 
-3. Configue the robot
+### 3. Configue the robot
 
 Create a new board component called `board` with model as `pi`.
 
@@ -45,7 +45,7 @@ Add the following Proccesses Section:
 ]
 ```
 
-4. Configure the local robot secret
+### 4. Configure the local robot secret
 
 Create a json file called `./robot-config.json`:
 
@@ -58,7 +58,7 @@ Create a json file called `./robot-config.json`:
 
 Fill in the details that are shown in the connect page. See `address` and `secret`.
 
-5. Deploy Code to Pi
+### 5. Deploy Code to Pi
 
 Run the code locally to get it setup. Follow direction in prompt to get Google Calendar auth token.
 
