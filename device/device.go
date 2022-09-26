@@ -131,6 +131,10 @@ func (r *ReminderDevice) NotifyOnceIfButtonPress(ctx context.Context) chan bool 
 	return callback
 }
 
+func (r *ReminderDevice) reset(ctx context.Context) {
+	r.setLedAndBuzzerOn(ctx, false)
+}
+
 func NewDevice(credFile string) (*ReminderDevice, error) {
 	creds, err := loadCredentialsFromFile(credFile)
 	if err != nil {
@@ -180,7 +184,7 @@ func NewDevice(credFile string) (*ReminderDevice, error) {
 	}
 
 	// reset
-	reminderDevice.setLedAndBuzzerOn(context.Background(), false)
+	reminderDevice.reset(context.Background())
 
 	return reminderDevice, nil
 }

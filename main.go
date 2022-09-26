@@ -81,14 +81,4 @@ func main() {
 		logger.Info("None detected waiting...")
 		time.Sleep(emailPullInterval)
 	}
-
-	// cancel := reminderDevice.StartNotification(context.Background())
-
-	// time.Sleep(5 * time.Second)
-	// // cancel()
-
-	// callback, _ := reminderDevice.NotifyOnceIfButtonPress(context.Background())
-
-	// <-callback
-	// logger.Infof("Button prssed lets do something")
 }
