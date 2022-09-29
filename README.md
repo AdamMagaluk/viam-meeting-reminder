@@ -7,6 +7,8 @@ meetings 2 minutes before they start all powered by [Viam](https://viam.com).
 
 Sparkfun Wishlist: https://www.sparkfun.com/wish_lists/169342
 
+Note: Not supported by Viam officially.
+
 ### 1. Create a Oauth2 Client Google Cloud
 
 Follow the [Google documentation here](https://developers.google.com/calendar/api/quickstart/go)
