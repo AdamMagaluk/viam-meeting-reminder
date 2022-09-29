@@ -3,6 +3,8 @@
 A sample device that connects a LED, Buzzer, Button as a alarm clock for Google Calendar
 meetings 2 minutes before they start all powered by [Viam](https://viam.com).
 
+![Meeting Reminder Image](/docs/images/meeting-reminder.jpg)
+
 `git clone https://github.com/AdamMagaluk/viam-meeting-reminder.git`
 
 Sparkfun Wishlist: https://www.sparkfun.com/wish_lists/169342
