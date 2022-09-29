@@ -5,6 +5,8 @@ meetings 2 minutes before they start all powered by [Viam](https://viam.com).
 
 `git clone https://github.com/AdamMagaluk/viam-meeting-reminder.git`
 
+Sparkfun Wishlist: https://www.sparkfun.com/wish_lists/169342
+
 ### 1. Create a Oauth2 Client Google Cloud
 
 Follow the [Google documentation here](https://developers.google.com/calendar/api/quickstart/go)
