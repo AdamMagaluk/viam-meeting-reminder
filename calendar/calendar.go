@@ -24,10 +24,11 @@ type Event struct {
 }
 
 type Calendar struct {
-	srv *calendar.Service
+	srv        *calendar.Service
+	calendarID string
 }
 
-func NewClient(ctx context.Context, jsonCredsFile string) (*Calendar, error) {
+func NewClient(ctx context.Context, jsonCredsFile, calendarID string) (*Calendar, error) {
 	b, err := os.ReadFile(jsonCredsFile)
 	if err != nil {
 		return nil, err
@@ -49,7 +50,8 @@ func NewClient(ctx context.Context, jsonCredsFile string) (*Calendar, error) {
 	}
 
 	return &Calendar{
-		srv: srv,
+		srv:        srv,
+		calendarID: calendarID,
 	}, nil
 }
 
@@ -57,7 +59,7 @@ func (c *Calendar) GetNextUpcomingEvent(ctx context.Context) (*Event, error) {
 	tNow := time.Now()
 	tEnd := tNow.Add(time.Minute * 60)
 
-	events, err := c.srv.Events.List("primary").
+	events, err := c.srv.Events.List(c.calendarID).
 		ShowDeleted(false).
 		SingleEvents(true).
 		TimeMin(tNow.Format(time.RFC3339)).

@@ -2,12 +2,14 @@ package main
 
 import (
 	"context"
+	"flag"
 	"time"
 
 	"adammagaluk.io/meeting-reminder/calendar"
 	"adammagaluk.io/meeting-reminder/device"
 
 	"github.com/edaniels/golog"
+	"github.com/pkg/errors"
 )
 
 const (
@@ -16,18 +18,22 @@ const (
 	notificationDuration = 30 * time.Second
 )
 
+var calendarID = flag.String("calendar", "primary", `calendar ID to use defaults to "primary"`)
+
 func main() {
+	flag.Parse()
+
 	logger := golog.NewDevelopmentLogger("client")
 
 	notifiedEvents := make(map[string]bool)
 
 	reminderDevice, err := device.NewDevice("./robot-config.json")
 	if err != nil {
-		logger.Fatal(err)
+		logger.Fatal(errors.Wrap(err, "unable to connect to robot"))
 	}
 	defer reminderDevice.Close(context.Background())
 
-	calendarClient, err := calendar.NewClient(context.Background(), "./calendar_oauth_creds.json")
+	calendarClient, err := calendar.NewClient(context.Background(), "./calendar_oauth_creds.json", *calendarID)
 	if err != nil {
 		logger.Fatal(err)
 	}

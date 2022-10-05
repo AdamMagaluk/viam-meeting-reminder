@@ -3,12 +3,13 @@ module adammagaluk.io/meeting-reminder
 go 1.18
 
 require (
-	github.com/edaniels/golog v0.0.0-20220915154812-56efeddfdb44
+	github.com/edaniels/golog v0.0.0-20221004200432-5f6b7167aca8
 	github.com/pkg/errors v0.9.1
-	go.viam.com/rdk v0.1.0
-	go.viam.com/utils v0.0.6-0.20220915183459-a7adb7b10f89
+	go.viam.com/rdk v0.1.2-0.20221004205450-52cee9fd9261
+	go.viam.com/utils v0.0.6-0.20221005121045-c837f9e5e463
+	golang.org/x/net v0.0.0-20220909164309-bea034e7d591
 	golang.org/x/oauth2 v0.0.0-20220909003341-f21342109be1
-	google.golang.org/api v0.97.0
+	google.golang.org/api v0.98.0
 )
 
 require (
@@ -22,7 +23,7 @@ require (
 	github.com/cenkalti/backoff v2.2.1+incompatible // indirect
 	github.com/cenkalti/backoff/v4 v4.1.3 // indirect
 	github.com/desertbit/timer v0.0.0-20180107155436-c41aec40b27f // indirect
-	github.com/edaniels/zeroconf v0.0.0-20220607181113-3dc7461460c6 // indirect
+	github.com/edaniels/zeroconf v1.0.2 // indirect
 	github.com/erh/scheme v0.0.0-20210304170849-99d295c6ce9a // indirect
 	github.com/erikstmartin/go-testdb v0.0.0-20160219214506-8d10e4a1bae5 // indirect
 	github.com/fsnotify/fsnotify v1.5.4 // indirect
@@ -86,13 +87,12 @@ require (
 	go.uber.org/goleak v1.1.12 // indirect
 	go.uber.org/multierr v1.8.0 // indirect
 	go.uber.org/zap v1.23.0 // indirect
-	go.viam.com/api v0.0.0-20220916213024-c0795f3a04fd // indirect
+	go.viam.com/api v0.0.0-20221003205706-3eb84cff2681 // indirect
 	go.viam.com/test v1.1.1-0.20220909204145-f61b7c01c33e // indirect
 	golang.org/x/crypto v0.0.0-20220722155217-630584e8d5aa // indirect
 	golang.org/x/exp v0.0.0-20220722155223-a9213eeb770e // indirect
 	golang.org/x/image v0.0.0-20220722155232-062f8c9fd539 // indirect
 	golang.org/x/mod v0.6.0-dev.0.20220419223038-86c51ed26bb4 // indirect
-	golang.org/x/net v0.0.0-20220909164309-bea034e7d591 // indirect
 	golang.org/x/sync v0.0.0-20220722155255-886fb9371eb4 // indirect
 	golang.org/x/sys v0.0.0-20220829200755-d48e67d00261 // indirect
 	golang.org/x/text v0.3.7 // indirect
