@@ -19,11 +19,17 @@ const (
 )
 
 var calendarID = flag.String("calendar", "primary", `calendar ID to use defaults to "primary"`)
+var debug = flag.Bool("debug", false, `run in debug mode`)
 
 func main() {
 	flag.Parse()
 
-	logger := golog.NewDevelopmentLogger("client")
+	var logger golog.Logger
+	if *debug {
+		logger = golog.NewDevelopmentLogger("meeting-reminder")
+	} else {
+		logger = golog.NewLogger("meeting-reminder")
+	}
 
 	notifiedEvents := make(map[string]bool)
 
