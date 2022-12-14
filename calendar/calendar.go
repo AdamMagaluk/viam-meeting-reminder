@@ -8,6 +8,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/edaniels/golog"
 	"github.com/pkg/errors"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
@@ -18,17 +19,20 @@ import (
 type Event struct {
 	ID        string
 	StartTime time.Time
+	EndTime   time.Time
 	Title     string
 	Status    string
 	Location  string
 }
 
 type Calendar struct {
-	srv        *calendar.Service
-	calendarID string
+	srv           *calendar.Service
+	calendarID    string
+	calendarQuery string
+	logger        golog.Logger
 }
 
-func NewClient(ctx context.Context, jsonCredsFile, calendarID string) (*Calendar, error) {
+func NewClient(ctx context.Context, jsonCredsFile, calendarID string, calendarQuery string, logger golog.Logger) (*Calendar, error) {
 	b, err := os.ReadFile(jsonCredsFile)
 	if err != nil {
 		return nil, err
@@ -52,46 +56,98 @@ func NewClient(ctx context.Context, jsonCredsFile, calendarID string) (*Calendar
 	return &Calendar{
 		srv:        srv,
 		calendarID: calendarID,
+		logger:     logger.Desugar().Named("calendar").Sugar(),
 	}, nil
 }
 
 func (c *Calendar) GetNextUpcomingEvent(ctx context.Context) (*Event, error) {
-	tNow := time.Now()
-	tEnd := tNow.Add(time.Minute * 60)
-
-	events, err := c.srv.Events.List(c.calendarID).
-		ShowDeleted(false).
-		SingleEvents(true).
-		TimeMin(tNow.Format(time.RFC3339)).
-		TimeMax(tEnd.Format(time.RFC3339)).
-		MaxResults(25).
-		OrderBy("startTime").
-		Do()
+	c.logger.Debug("GetNextUpcomingEvent")
+	req := c.buildReqest().OrderBy("startTime")
+	events, err := req.Do()
 
 	if err != nil {
 		return nil, err
 	}
 
 	for _, e := range events.Items {
-		sTime, err := time.Parse(time.RFC3339, e.Start.DateTime)
+
+		event, err := formatEvent(e)
 		if err != nil {
 			return nil, err
 		}
 
-		if sTime.Before(time.Now()) {
+		if event.StartTime.Before(time.Now()) {
+			c.logger.Debugf(" - GetNextUpcomingEvent [%s] %s skipping, start time before now", event.Title, event.StartTime)
 			continue
 		}
 
-		return &Event{
-			ID:        e.Id,
-			StartTime: sTime,
-			Title:     e.Summary,
-			Status:    e.Status,
-			Location:  e.Location,
-		}, nil
+		return event, nil
 	}
 
 	return nil, nil
+}
+
+func (c *Calendar) GetNextEndingEvent(ctx context.Context) (*Event, error) {
+	c.logger.Info("GetNextEndingEvent")
+	req := c.buildReqest().OrderBy("startTime")
+	events, err := req.Do()
+
+	if err != nil {
+		return nil, err
+	}
+
+	for _, e := range events.Items {
+		event, err := formatEvent(e)
+		if err != nil {
+			return nil, err
+		}
+
+		if event.EndTime.Before(time.Now()) {
+			c.logger.Debugf(" - GetNextEndingEvent [%s] %s skipping, end time before now", event.Title, event.EndTime)
+			continue
+		}
+
+		return event, nil
+	}
+
+	return nil, nil
+}
+
+func formatEvent(e *calendar.Event) (*Event, error) {
+	sTime, err := time.Parse(time.RFC3339, e.Start.DateTime)
+	if err != nil {
+		return nil, err
+	}
+	eTime, err := time.Parse(time.RFC3339, e.End.DateTime)
+	if err != nil {
+		return nil, err
+	}
+
+	return &Event{
+		ID:        e.Id,
+		StartTime: sTime,
+		EndTime:   eTime,
+		Title:     e.Summary,
+		Status:    e.Status,
+		Location:  e.Location,
+	}, nil
+}
+
+func (c *Calendar) buildReqest() *calendar.EventsListCall {
+	tNow := time.Now()
+	tEnd := tNow.Add(time.Minute * 60)
+
+	req := c.srv.Events.List(c.calendarID).
+		ShowDeleted(false).
+		SingleEvents(true).
+		TimeMin(tNow.Format(time.RFC3339)).
+		TimeMax(tEnd.Format(time.RFC3339))
+
+	if c.calendarQuery != "" {
+		req = req.Q(c.calendarQuery)
+	}
+
+	return req
 }
 
 // Retrieve a token, saves the token, then returns the generated client.
